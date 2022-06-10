@@ -46,9 +46,15 @@ public class CategoriaResource {
 		return ResponseEntity.created(uri).body(categoriaSalva);
 	}
 	
+	/* Este método devolve um objeto categoria em JSON quando esta existe
+	 * ou um código 404 not found, utilizando um map que está recebendo um objeto
+	 * como resposta ou um Optional no caso de enviar 404 not found.
+	 */
 	@GetMapping("/{codigo}")
-	public Categoria buscarPeloCodigo(@PathVariable Long codigo) {
-		return categoriaRepository.findById(codigo).orElse(null);
+	public ResponseEntity<Categoria> buscarPeloCodigo(@PathVariable Long codigo) {
+		return this.categoriaRepository.findById(codigo)
+				.map(categoria -> ResponseEntity.ok(categoria))
+				.orElse(ResponseEntity.notFound().build());
 	}
 	
 }
