@@ -1,7 +1,5 @@
 package com.example.algamoney.api.model;
 
-import java.util.Objects;
-
 import javax.persistence.Embeddable;
 
 @Embeddable
