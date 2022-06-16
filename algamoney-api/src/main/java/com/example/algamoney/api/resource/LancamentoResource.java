@@ -73,6 +73,7 @@ public class LancamentoResource {
 		return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo);
 	}
 	
+	/* Exceção gerada quando a pessoa não existe. Acontece no Lançamento */
 	@ExceptionHandler({ PessoaInexistenteOuInativaException.class })
 	public ResponseEntity<Object> handlePessoaInexistenteOuInativaException(PessoaInexistenteOuInativaException ex) {
 		String mensagemUsuario = messageSource.getMessage("pessoa.inexistente-ou-inativa", null, LocaleContextHolder.getLocale());
