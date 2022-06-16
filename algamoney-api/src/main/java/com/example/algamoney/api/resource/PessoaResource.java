@@ -44,16 +44,6 @@ public class PessoaResource {
 		return pessoaRepository.findAll();
 	}
 	
-	/* Este método insere uma Pessoa e retorna a uri do recurso criado com
-	 * status 201 created */	
-	@PostMapping
-	public ResponseEntity<Pessoa> criar(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
-		Pessoa pessoaSalva = pessoaRepository.save(pessoa);
-		//Código que estava repetido simplificado pelo listener
-		publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getCodigo()));
-		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
-	}
-	
 	/* Este método devolve um objeto pessoa em JSON quando esta existe
 	 * ou um código 404 not found, utilizando um map que está recebendo um objeto
 	 * como resposta ou um Optional no caso de enviar 404 not found.
@@ -64,6 +54,20 @@ public class PessoaResource {
 				.map(pessoa -> ResponseEntity.ok(pessoa))
 				.orElse(ResponseEntity.notFound().build());
 	}
+	
+	/* Este método insere uma Pessoa e retorna a uri do recurso criado com
+	 * status 201 created */	
+	@PostMapping
+	public ResponseEntity<Pessoa> criar(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
+		Pessoa pessoaSalva = pessoaRepository.save(pessoa);
+		
+		//Código que estava repetido simplificado pelo listener
+		publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getCodigo()));
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
+	}
+	
+	
 	
 	
 	/* Este método deleta um registro passando-se o código da pessoa */
