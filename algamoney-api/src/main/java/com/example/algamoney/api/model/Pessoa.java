@@ -80,5 +80,6 @@ public class Pessoa {
 		Pessoa other = (Pessoa) obj;
 		return Objects.equals(codigo, other.codigo);
 	}
-	
+
+
 }
