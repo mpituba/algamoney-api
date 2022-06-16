@@ -76,6 +76,14 @@
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 		
+		<!-- Commons Lang para ajuda em mensagens de erro -->
+		
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			
+		</dependency>
+		
 	</dependencies>
 
 	<build>
