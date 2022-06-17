@@ -30,7 +30,8 @@ public class Pessoa {
 	private Boolean ativo;
 
 	
-	//Método de negócio
+	/*Método de negócio. As anotações são para o Java e Jackson desconsiderar o método
+	 como propriedade do modelo. */
 	@JsonIgnore
 	@Transient
 	public boolean isInativo() {
