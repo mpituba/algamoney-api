@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+/* Modelo do Filtro dos Lancamentos, filtro implementado em LancamentoRepositoryImpl
+ * juntamente com LancamentoRepositoryQuery  */
 public class LancamentoFilter {
 	
 	private String descricao;
@@ -13,6 +15,7 @@ public class LancamentoFilter {
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataVencimentoAte;
+	
 	
 	//Getters and Setters
 	public String getDescricao() {
@@ -39,10 +42,6 @@ public class LancamentoFilter {
 		this.dataVencimentoAte = dataVencimentoAte;
 	}
 
-	public String getDataVencimento() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
+		
 	
 }

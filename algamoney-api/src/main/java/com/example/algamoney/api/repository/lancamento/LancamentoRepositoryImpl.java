@@ -25,12 +25,12 @@ public class LancamentoRepositoryImpl  implements LancamentoRepositoryQuery {
 	
 	@Override
 	public List<Lancamento> filtrar(LancamentoFilter lancamentoFilter) {
-		
+		// CriteriaJpa
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<Lancamento> criteria = builder.createQuery( Lancamento.class );
 		Root<Lancamento> root = criteria.from(Lancamento.class);
 		
-		// criar as restrições
+		// criar as restrições equivalente ao where do SQL
 		Predicate[] predicates = criarRestricoes(lancamentoFilter, builder, root);
 		criteria.where(predicates);
 		
@@ -41,7 +41,8 @@ public class LancamentoRepositoryImpl  implements LancamentoRepositoryQuery {
 
 	
 	}
-	/* Método cria uma lista de predicates */
+	
+	/* Método retorna uma lista de predicates */
 	private Predicate[] criarRestricoes(LancamentoFilter lancamentoFilter, CriteriaBuilder builder,
 			Root<Lancamento> root) {
 		
