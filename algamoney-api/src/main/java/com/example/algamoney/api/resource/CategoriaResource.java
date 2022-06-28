@@ -42,7 +42,7 @@ public class CategoriaResource {
 	/* Este método insere uma categoria e retorna a uri do recurso criado com
 	 * status 201 created */	
 	@PostMapping
-	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and hasAuthority('SCOPE_write')")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and hasAuthority('SCOPE_write', 'SCOPE_read')")
 	public ResponseEntity<Categoria> criar(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
 		Categoria categoriaSalva = categoriaRepository.save(categoria);
 		//Código que estava repetido simplificado pelo listener via publisher
