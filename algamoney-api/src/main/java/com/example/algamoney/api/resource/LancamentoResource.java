@@ -30,7 +30,7 @@ import com.example.algamoney.api.exceptionhandler.AlgamoneyExceptionHandler.Erro
 import com.example.algamoney.api.model.Lancamento;
 import com.example.algamoney.api.repository.LancamentoRepository;
 import com.example.algamoney.api.repository.filter.LancamentoFilter;
-
+import com.example.algamoney.api.repository.projection.ResumoLancamento;
 import com.example.algamoney.api.service.LancamentoService;
 import com.example.algamoney.api.service.exception.PessoaInexistenteOuInativaException;
 
@@ -41,15 +41,17 @@ public class LancamentoResource {
 	@Autowired
 	private LancamentoRepository lancamentoRepository;
 	
-		// Lança o evento para evitar repetição de código.
-		@Autowired
-		private ApplicationEventPublisher publisher;
+	// Lança o evento para evitar repetição de código.
+	@Autowired
+	private ApplicationEventPublisher publisher;
+	
+	@Autowired
+	private LancamentoService lancamentoService;
+	
+	@Autowired
+	private MessageSource messageSource;
 		
-		@Autowired
-		private LancamentoService lancamentoService;
 		
-		@Autowired
-		private MessageSource messageSource;
 	
 	/* Este método retorna todos os registros de lançamento, atentar ao pom por causa das datas.
 	 * Foi acrescentado o recurso de paginação neste método com alterações nos métodos
@@ -59,6 +61,19 @@ public class LancamentoResource {
 	public Page<Lancamento> pesquisar(LancamentoFilter lancamentoFilter, Pageable pageable) {
 		return lancamentoRepository.filtrar(lancamentoFilter, pageable);
 	}
+	
+	
+	/* Este método retorna registros de  uma projection de lançamento, atentar ao pom por causa
+	 *  das datas. Foi criado com o recurso de paginação neste método e alterações nos métodos
+	 * LancamentoRepositoryImpl e LancamentoRepositoryQuery. O modelo está em ResumoLancamento 
+	 * dentro da projection. Possui um parâmetro "resumo" que o distingue do método original
+	 * acima, o parametro passado na requisição determina sua chamada. */
+	@GetMapping(params = "resumo")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and hasAuthority('SCOPE_read')")
+	public Page<ResumoLancamento> resumir(LancamentoFilter lancamentoFilter, Pageable pageable) {
+		return lancamentoRepository.resumir(lancamentoFilter, pageable);
+	}
+	
 	
 	/* Este método devolve um objeto lancamento em JSON quando este existe
 	 * ou um código 404 not found, utilizando um map que está recebendo um objeto

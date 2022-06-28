@@ -11,9 +11,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.example.algamoney.api.model.Categoria_;
 import com.example.algamoney.api.model.Lancamento;
 import com.example.algamoney.api.model.Lancamento_;
+import com.example.algamoney.api.model.Pessoa_;
 import com.example.algamoney.api.repository.filter.LancamentoFilter;
+import com.example.algamoney.api.repository.projection.ResumoLancamento;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,7 +25,6 @@ import org.springframework.util.ObjectUtils;
 
 public class LancamentoRepositoryImpl  implements LancamentoRepositoryQuery {
 
-	
 	@PersistenceContext
 	private EntityManager manager;
 	
@@ -45,6 +47,34 @@ public class LancamentoRepositoryImpl  implements LancamentoRepositoryQuery {
 
 	
 	}
+	
+	
+	/* Método pertencente a projection de lancamentos com criteria e paginação*/
+	@Override
+	public Page<ResumoLancamento> resumir(LancamentoFilter lancamentoFilter, Pageable pageable) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<ResumoLancamento> criteria = builder.createQuery(ResumoLancamento.class);
+		Root<Lancamento> root = criteria.from(Lancamento.class);
+		
+		/* Os parâmetros da criteria devem ser passados na ordem */
+		criteria.select(builder.construct(ResumoLancamento.class
+				, root.get(Lancamento_.codigo), root.get(Lancamento_.descricao)
+				, root.get(Lancamento_.dataVencimento), root.get(Lancamento_.dataPagamento)
+				, root.get(Lancamento_.valor), root.get(Lancamento_.tipo)
+				, root.get(Lancamento_.categoria).get(Categoria_.nome)
+				, root.get(Lancamento_.pessoa).get(Pessoa_.nome)));
+		
+		// criar as restrições equivalente ao where do SQL
+		Predicate[] predicates = criarRestricoes(lancamentoFilter, builder, root);
+		criteria.where(predicates);
+		
+		TypedQuery<ResumoLancamento> query = manager.createQuery(criteria);
+		adicionarRestricoesDePaginacao(query, pageable);
+		
+		return new PageImpl<>(query.getResultList(), pageable, total(lancamentoFilter));
+		
+	}
+	
 	
 	
 	/* Método retorna uma lista de predicates */
@@ -76,7 +106,7 @@ public class LancamentoRepositoryImpl  implements LancamentoRepositoryQuery {
 	}
 	
 	/* Método de acessório da paginação */
-	private void adicionarRestricoesDePaginacao(TypedQuery<Lancamento> query, Pageable pageable) {
+	private void adicionarRestricoesDePaginacao(TypedQuery<?> query, Pageable pageable) {
 		
 		int paginaAtual = pageable.getPageNumber();
 		int totalRegistrosPorPagina = pageable.getPageSize();
@@ -102,6 +132,9 @@ public class LancamentoRepositoryImpl  implements LancamentoRepositoryQuery {
 		
 		return manager.createQuery(criteria).getSingleResult();
 	}
+
+
+	
 
 
 	
