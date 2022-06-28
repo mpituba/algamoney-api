@@ -33,14 +33,19 @@ public class CorsFilter implements Filter {
 		/* Os dois cabeçalhos abaixo são enviados em todas as requisições, o
 		 * segundo cabeçalho libera o envio do refresh_token		 */
 		response.setHeader("Access-Control-Allow-Origin", originPermitida);
-		response.setHeader("/access-Control-Allow-Credentials", "true");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
 		
 		if ("OPTIONS".equals(request.getMethod()) && originPermitida.equals(request.getHeader("Origin"))) {
+			
 			response.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS");
 			response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept");			
+			response.setHeader("Access-Control-Max-Age", "3600");
 			response.setStatus(HttpServletResponse.SC_OK);
+			
 		} else {
+			
 			chain.doFilter(req, resp);
+			
 		}
 		
 		
