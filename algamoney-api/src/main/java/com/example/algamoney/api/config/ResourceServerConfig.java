@@ -11,6 +11,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -28,6 +29,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 @SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true) //Habilita Segurança nos métodos
 public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
@@ -66,6 +68,12 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
+	/* Faz a segurança dos métodos com OAuth2
+	@Bean
+	public MethodSecurityExpressionHandler createExpressionHandler() {
+		return new OAuth2MethodSecurityExpressionHandler();
+	} */
 		
 		
 	private JwtAuthenticationConverter jwtAuthenticationConverter() {

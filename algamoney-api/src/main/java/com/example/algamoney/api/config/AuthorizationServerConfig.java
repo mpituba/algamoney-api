@@ -32,14 +32,20 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		
 		clients.inMemory()
-			.withClient("angular")
-			//Senha do Cliente em Bcrypt no gerador de senhas
-			.secret("$2a$10$UAc049fUm6Bxy8X/.mpn8.PfD2ncb4ZgvmEa5Hb.JOGVJNX1ampgG") //@ngul@r0
-			.scopes("read", "write")
-			.authorizedGrantTypes("password", "refresh_token")
-			.accessTokenValiditySeconds(1800) //Tempo de expiração do access token
-			.refreshTokenValiditySeconds(3600 * 24);
-		
+				.withClient("angular")
+				//Senha do Cliente em Bcrypt no gerador de senhas
+				.secret("$2a$10$UAc049fUm6Bxy8X/.mpn8.PfD2ncb4ZgvmEa5Hb.JOGVJNX1ampgG") //@ngul@r0
+				.scopes("read", "write")
+				.authorizedGrantTypes("password", "refresh_token")
+				.accessTokenValiditySeconds(1800) //Tempo de expiração do access token
+				.refreshTokenValiditySeconds(3600 * 24)
+			.and()
+				.withClient("mobile")
+				.secret("$2a$10$G0um1MOJO5suXORsquGmmO0L6ZU2VWBcbMAc8pEfG7a8cSzOBYJ6e") //m0b1l30
+				.scopes("read")
+				.authorizedGrantTypes("password", "refresh_token")
+				.accessTokenValiditySeconds(1800) //Tempo de expiração do access token
+				.refreshTokenValiditySeconds(3600 * 24);
 	}
 	
 	
