@@ -134,5 +134,5 @@
 		</plugins>
 	</build>
 
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 </project>
